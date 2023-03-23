@@ -24,7 +24,13 @@ namespace FirstProject
             //Bullets.Game();
             //Struct.BuildStruct();
 
-            Coding.Programs3();
+            
+
+            CollectionsClass.collections();
+
+            /*Coding.Programs1();
+            Coding.Programs2();
+            Coding.Programs3();*/
 
 
         }
