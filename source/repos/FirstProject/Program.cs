@@ -9,7 +9,7 @@ namespace FirstProject
         static void Main(string[] args)
         {
 
-            ControlStatement.Loops();
+            /*ControlStatement.Loops();
             
             FunctionsRef.GetInput();
             
@@ -19,7 +19,13 @@ namespace FirstProject
 
             Constructor cons = new Constructor("Madhu");
 
-            Console.WriteLine(cons.GetDetails());
+            Console.WriteLine(cons.GetDetails());*/
+
+            //Bullets.Game();
+            //Struct.BuildStruct();
+
+            Coding.Programs3();
+
 
         }
 

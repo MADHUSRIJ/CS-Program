@@ -87,6 +87,19 @@ namespace FirstProject
 
             Console.WriteLine("\n");
 
+            
+            //JAGGED ARRAYS
+            int[][] a4 = new int[2][];
+            a4[0] = new int[] { 1, 2 };
+            a4[1]= new int[] { 3, 4 };
+            for (int i=0;i<a4.Length;i++)
+            {
+                for(int j=0;j<a4.Length;j++)
+                {
+                    Console.WriteLine(a4[i][j] );
+                }
+            }
+
 
         }
         public static void PrintAnArray(int[] arr)
