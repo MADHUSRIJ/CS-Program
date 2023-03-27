@@ -56,6 +56,7 @@ namespace FirstProject
             }
             Console.WriteLine("----------------");
             Console.WriteLine(myStack.Peek());
+
             //Queue
             var myQueue = new Queue<int>();
             myQueue.Enqueue(1);
@@ -71,6 +72,67 @@ namespace FirstProject
             {
                 Console.WriteLine(item);
             }
+
+            //linked list
+            var myLinkedList = new LinkedList<int>();
+            var myLinkedList1 = new LinkedList<int>();
+            myLinkedList.AddLast(1);
+            myLinkedList.AddLast(2);
+            myLinkedList.AddLast(3);
+            myLinkedList.AddLast(4);
+            myLinkedList.AddLast(2);
+            myLinkedList.AddLast(5);
+            myLinkedList.AddLast(6);
+            myLinkedList.AddLast(2);
+            myLinkedList.AddLast(3);
+            myLinkedList.AddLast(4);
+
+
+            //LinkedListNode<int> node1 = myLinkedList.Find(2);
+            //myLinkedList.AddBefore(node, 10);
+            //myLinkedList.AddBefore(node1, 10);
+
+
+            foreach (var i in myLinkedList)
+            {
+                if (i == 2)
+                {
+                    myLinkedList1.AddLast(10);
+
+                }
+                myLinkedList1.AddLast(i);
+            }
+
+            foreach (int i in myLinkedList1)
+            {
+                Console.WriteLine(i);
+            }
+            
+
+            //Dictionary
+            Dictionary<int, string> d = new Dictionary<int, string>();
+            d.Add(1, "vignesh");
+            d.Add(2, "adam");
+            d.Add(3, "madhu");
+            d.Add(4, "prabu");
+            d.Add(5, "rahul");
+            d.Add(6, "rahul");
+            d.Add(7, "");
+
+            foreach (KeyValuePair<int, string> kvp in d)
+
+            {
+                if (kvp.Value.Equals("adam"))
+                {
+                    d[kvp.Key] = "ADAM";
+
+                }
+            }
+            foreach (KeyValuePair<int, string> kvp in d)
+            {
+                Console.WriteLine(kvp.Key + " " + kvp.Value);
+            }
+
         }
     }
 }

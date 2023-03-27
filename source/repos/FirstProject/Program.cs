@@ -29,12 +29,16 @@ namespace FirstProject
 
             //ExceptionHandling.ExpHand();
 
+            /*Generic gc = new Generic();
+            gc.call();*/
+
             /*Coding.Programs1();
             Coding.Programs2();
             Coding.Programs3();*/
 
-            Generic gc = new Generic();
-            gc.call();
+            Coding.Programs4();
+
+
 
 
         }

@@ -128,5 +128,36 @@ namespace FirstProject
                 Console.Write(i + " ");
             }
         }
+
+        public static void Programs4() { 
+            String str = Console.ReadLine();
+            String ans = str.Substring(str.Length-1)+str.Substring(1,str.Length-2)+str.Substring(0,1);
+            String ans1 = "";
+            if (str.Length >= 1)
+            {
+               ans1 = str.Substring(str.Length - 1) + str + str.Substring(str.Length - 1);
+            }
+            remove(str);
+            
+            /*Console.WriteLine(ans);
+            Console.WriteLine(ans1); */
+        }
+
+        public static void remove(String str)
+        {
+            
+
+            if (str.Contains("ok"))
+            {
+                int k = str.IndexOf("ok");
+                String stm = str.Substring(0,k)+str.Substring(k+2);
+                remove(stm);
+            }
+            else
+            {
+                Console.WriteLine(str);
+            }
+            
+        }
     }
 }

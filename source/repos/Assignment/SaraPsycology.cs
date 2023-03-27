@@ -125,6 +125,30 @@ namespace Assignment
                 int age = now.Year - dob.Year;
 
                 Console.WriteLine("Your age is " + age);
+
+                var dd = dob.Day.ToString();
+                var mm = dob.Month.ToString();
+                var yy = now.Year.ToString();
+                Console.WriteLine();
+                //Console.WriteLine("Date "+dd);
+
+                DateTime thisbd = new DateTime(Convert.ToInt32(yy), Convert.ToInt32(mm), Convert.ToInt32(dd));
+
+                Console.WriteLine("Reminder!!");
+
+                TimeSpan difference = thisbd - now;
+
+                int totalDays = difference.Days;
+                
+                if(totalDays < 0) 
+                {
+                    totalDays += 365;
+                }
+
+               
+                 Console.WriteLine("Your Birthday is in "+(totalDays)+" days");
+                
+
             }
             catch (Exception e)
             {
