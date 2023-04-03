@@ -45,6 +45,8 @@ namespace Travel
         public void LicensePlate(string originalDmv,int number)
         {
             string[] originalDmvSeparation = originalDmv.Split("-");
+
+
             string dmv = "";
             foreach (string s in originalDmvSeparation)
             {
@@ -55,7 +57,7 @@ namespace Travel
             String tempDmv = "";
             int count = 0;
 
-            for(int i= dmv.Length - 1; i >= 0; i--)
+            for(int i = dmv.Length - 1; i >= 0; i--)
             {
                 if(count == number)
                 {

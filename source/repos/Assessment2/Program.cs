@@ -38,6 +38,8 @@ namespace Assessment2
             program.totalTimeToGetNewLicense(yourName,numberOfAgents,peopleNames);
             Console.WriteLine("Total Time - "+program.totalTime);
 
+           
+
         }
 
         public void totalTimeToGetNewLicense(String yourName, int numberOfAgents, string peopleNames)
