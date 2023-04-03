@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 /*Question:
 English to Pig Latin Translator
 
-
-
 Pig latin has two very simple rules:
 
 If a word starts with a consonant move the first letter(s) of the word, till you reach a vowel, to the end of the word and add "ay" to the end.
