@@ -6,8 +6,9 @@
         {
             /*WorkTime workTime = new WorkTime();
             workTime.OverTime(13.25, 15, 30, 1.5);*/
-
-            Translate.TranslateMain();
+            Pocker pocker = new Pocker();
+            pocker.PockerCombination();
+            //Translate.TranslateMain();
         }
     }
 }
