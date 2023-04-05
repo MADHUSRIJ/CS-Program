@@ -19,7 +19,7 @@ There are 10 different combinations. Here's the list, in decreasing order of imp
 Name Description
 -- Royal Flush A, K, Q, J, 10, all with the same suit.
 -- Straight Flush Five cards in sequence, all with the same suit.
--- Four of a Kind Four cards of the same rank.  4-1, 3-2, 3-0,2-2,2-0
+-- Four of a Kind Four cards of the same rank.  4-1, 3-2, 3-(1-1),2-2-1,2-1-1-1
 -- Full House Three of a Kind with a Pair.
 -- Flush Any five cards of the same suit, not in sequence.
 -- Straight Five cards in a sequence, but not of the same suit.
@@ -46,6 +46,7 @@ namespace Hands_On
 
         public Pocker() 
         {
+            //define and map each suit with a number
             MapSuit = new Dictionary<string, int>();
             MapSuit.Add("2", 2);
             MapSuit.Add("3", 3);
@@ -78,22 +79,16 @@ namespace Hands_On
 
         public string PockerHandRanking(string[] cards)
         {
-            foreach (string key in MapSuit.Keys)
-            {
-                Console.WriteLine(key+" " + MapSuit[key]);
-            }
-
-            List<char> kind = new List<char>();
-            List<int> suit = new List<int>();
+            
+            List<char> kind = new List<char>(); //kind of cards withoud dublicates
+            List<int> suit = new List<int>(); // rank of cards
             int index = 0;
 
+            //iterate the deck of cards and get kind and rank of each card
            foreach(string card in cards)
             {
                 String temp = card.Substring(0, card.Length - 1);
-                //Console.WriteLine("Temp - " + temp);
-
                 suit.Add(MapSuit[temp]);
-
 
                 if (!kind.Contains(card[card.Length - 1]))
                 {
@@ -101,82 +96,108 @@ namespace Hands_On
                 }
                 index++;
             }
+
+            //sort the rank of cards
             List<int> sortedSuit = suit;
             sortedSuit.Sort();
 
-
+            //deck with all 5 cards same
             if (kind.Count == 1 && suit.Count == 5)
             {
+                //Royal Flush contains {K,Q,J,A,10}
                 if (suit.Contains(14) && suit.Contains(13) && suit.Contains(12) && suit.Contains(11) && suit.Contains(10))
                 {
                     return "Royal Flush";
                 }
 
+                //Straight Flush is consecutive cards of same kind
                 if ((sortedSuit[4] - sortedSuit[0]) == 4)
                 {
                     return "Straight Flush";
                 }
+
+                //Flush is non sequence cards of same kind
                 else
                 {
                     return "Flush";
                 }
             }
+            //Straight is sequence card of various kinds
             else if ((sortedSuit[4] - sortedSuit[0]) == 4)
             {
                 return "Straight";
             }
 
-            Dictionary<int, int> rankCount = new Dictionary<int, int>();
-            List<int> ranks = new List<int>();
+            // "Js", "Jh", "3s", "3c", "2h"
+            Dictionary<int, int> rankCount = new Dictionary<int, int>();// 11:2, 3:2, 2:1
+            List<int> ranks = new List<int>();//11,3,2
+
+            // Combination of Cards
+            //4 - 1,
+            //3 - 2,
+            //3 - (1 - 1),
+            //2 - 2 - 1,
+            //2 - 1 - 1 - 1
+
+            //Get distinct rank and their counts
             for (int indexSortedSuit = 0; indexSortedSuit < 5; indexSortedSuit++)
             {
                 if (rankCount.ContainsKey(sortedSuit[indexSortedSuit]))
                 {
+                    //if rankcount containts the rank just increase the count by 1
                    rankCount[sortedSuit[indexSortedSuit]]+=1;
                 }
                 else
                 {
+                    //if rankcount does not containts the rank, add it to the dict and list
                     rankCount.Add(sortedSuit[indexSortedSuit], 1);
                     ranks.Add(sortedSuit[indexSortedSuit]);
                 }
             }
 
-            foreach(int tank in ranks)
-            {
-                Console.Write(tank + " - " + rankCount[tank]);
-            }
-            Console.WriteLine();
 
+            //for 4-1 and 3-2 combinations
             if (ranks.Count == 2)
             {
                 int rank1 = rankCount[ranks[0]];
                 int rank2 = rankCount[ranks[1]];
+
+                //any one of the rank count is four
                 if ((rank1 == 4 && rank2 == 1) || (rank1 == 1 && rank2 == 4))
                 {
                     return "Four of a Kind";
                 }
+
+                //one of the rank count is four and other is two
                 if ((rank1 == 3 && rank2 == 2) || (rank1 == 2 && rank2 == 3))
                 {
                     return "Full House";
                 }
             }
+
+            //for 3-1-1 and 2-2-1 combinations
             else if (ranks.Count == 3)
             {
                 int rank1 = rankCount[ranks[0]];
                 int rank2 = rankCount[ranks[1]];
                 int rank3 = rankCount[ranks[2]];
 
+                //any one of the rank count is three
                 if (rank1 == 3 || rank2 == 3 || rank3 == 3)
                 {
                     return "Three of a Kind";
                 }
+                //any two of the rank count is two each
                 if ((rank1 == 2 && rank2 == 2) || (rank1 == 2 && rank3 == 2) || (rank2 == 2 && rank3 == 2))
                 {
                     return "Two Pair";
                 }
             }
+
+            //for 2-1-1-1 combination
             else
             {
+                //any one of the rank count is two
                 foreach (int rank in rankCount.Keys)
                 {
                     if (rankCount[rank] == 2)
@@ -186,6 +207,7 @@ namespace Hands_On
                 }
             }
 
+            //if nothing goes rightt
             return "High Card";
 
         }
