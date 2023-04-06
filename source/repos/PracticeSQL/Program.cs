@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Reflection.PortableExecutable;
 
 namespace PracticeSQL
 {
@@ -22,13 +23,26 @@ namespace PracticeSQL
             conn.Open();
 
             SqlCommand cmd = conn.CreateCommand();
-            SqlDataReader reader;
+
+            //FetchEmployeeDetails(cmd);
+            //InsertIntoProjectDetails(cmd);
+            //FetchProjectDetailsUsingID(cmd);
+            //DeleteProjectDetails(cmd);
+            //UpdateProjectDetails(cmd);
+            //FetchEmployeeBasedOnProjectIdStoredProcedure();
+            //UpdateProjectDetailsStoredProcedure();
+
+            conn.Close();
 
 
-            //Get details from projectDetails table
+        }
+
+        public static void FetchEmployeeDetails(SqlCommand cmd)
+        {
+            //Get details from employeeDetails table
             cmd.CommandText = "SELECT * FROM employeeDetails";
 
-            reader = cmd.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
             List<MyEmployeeData> dataList = new List<MyEmployeeData>();
 
             while (reader.Read())
@@ -47,8 +61,9 @@ namespace PracticeSQL
             }
 
             reader.Close();
-
-            /*
+        }
+        public static void InsertIntoProjectDetails(SqlCommand cmd)
+        {
             //Insert Value into projectDetails table and Display
             Console.WriteLine("Enter the Project Details");
             Console.Write("Project Id : ");
@@ -63,27 +78,45 @@ namespace PracticeSQL
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = "SELECT * FROM projectDetails";
-            reader = cmd.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<MyProjectData> dataList = new List<MyProjectData>();
+
             while (reader.Read())
             {
-                Console.WriteLine(reader.GetInt32(0) + " " + reader.GetString(1) + " " + reader.GetString(2));
+                MyProjectData data = new MyProjectData();
+                data.projectId = (int)reader["projectId"];
+                data.position = (string)reader["position"];
+                data.duration = (string)reader["duration"];
+
+                dataList.Add(data);
+                //Console.WriteLine(reader.GetInt32(0)+" "+ reader.GetString(1) + " " + reader.GetString(2));
+            }
+
+            foreach (MyProjectData data in dataList)
+            {
+                Console.WriteLine(data.projectId + " " + data.position+" "+data.duration);
             }
 
             reader.Close();
+        }
+        public static void FetchProjectDetailsUsingID(SqlCommand cmd)
+        {
 
             //Get specific data from projectDetails table using projectId and Display
             Console.Write("Enter Project Id : ");
             int projectId = Convert.ToInt32(Console.ReadLine());
 
             cmd.CommandText = $"SELECT * FROM projectDetails WHERE projectId = {projectId}";
-            reader = cmd.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Console.WriteLine(reader.GetInt32(0) + " " + reader.GetString(1) + " " + reader.GetString(2));
             }
 
             reader.Close();
-
+        }
+        public static void DeleteProjectDetails(SqlCommand cmd)
+        {
             //Delete specific data from projectDetails using projectID
             Console.Write("Enter Project Id : ");
             int projectId = Convert.ToInt32(Console.ReadLine());
@@ -107,7 +140,9 @@ namespace PracticeSQL
                 Console.WriteLine("Error - " + error.Message);
 
             }
-
+        }
+        public static void UpdateProjectDetails(SqlCommand cmd)
+        {
             //Update specific data from projectDetails using projectID
             Console.Write("Enter Project Id : ");
             int projectId = Convert.ToInt32(Console.ReadLine());
@@ -133,10 +168,12 @@ namespace PracticeSQL
                 Console.WriteLine("Error - " + error.Message);
 
             }
-            */
-
-            conn.Close();
-
+            
+        }
+        public static void FetchEmployeeBasedOnProjectIdStoredProcedure()
+        {
+            
+            
             //Using stored Procedures
             using (SqlConnection connect = new SqlConnection("Data Source=5CG9441HWP;Integrated Security=True;Encrypt=False;Initial Catalog=PracticeDatabase;"))
             {
@@ -150,7 +187,7 @@ namespace PracticeSQL
                     command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = projectId;
                     //command.ExecuteNonQuery();
 
-                    reader = command.ExecuteReader();
+                    SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         Console.WriteLine(reader.GetValue(0));
@@ -158,7 +195,26 @@ namespace PracticeSQL
                 }
                 connect.Close();
             }
+        }
+        public static void UpdateProjectDetailsStoredProcedure()
+        {
+            //Using stored Procedures
+            using (SqlConnection connect = new SqlConnection("Data Source=5CG9441HWP;Integrated Security=True;Encrypt=False;Initial Catalog=PracticeDatabase;"))
+            {
+                connect.Open();
+                Console.Write("Enter Project Id : ");
+                int projectId = Convert.ToInt32(Console.ReadLine());
 
+                using (SqlCommand command = new SqlCommand("updateProjectDetails", connect))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.Add("@projectId", System.Data.SqlDbType.Int).Value = projectId;
+                    command.ExecuteNonQuery();
+
+
+                }
+                connect.Close();
+            }
 
         }
     }
