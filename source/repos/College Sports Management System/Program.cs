@@ -31,6 +31,7 @@ namespace College_Sports_Management_System
                         "11 - Registration Individual\n" +
                         "12 - Registration Group\n" +
                         "13 - Payment\n" +
+                        "14 - View ScoreBoard\n" +
                         "Enter your choice : ");
                     choice = Convert.ToInt32(Console.ReadLine());
                     Program program = new Program();
@@ -52,7 +53,7 @@ namespace College_Sports_Management_System
                             program.AddTournament(cmd);
                             break;
                         case 6:
-                            program.RemoveSports();
+                            program.RemoveSports(cmd);
                             break;
                         case 7:
                             program.EditScoreBoard(cmd);
@@ -61,10 +62,10 @@ namespace College_Sports_Management_System
                             program.AddPlayer(cmd);
                             break;
                         case 9:
-                            program.RemovePlayer();
+                            program.RemovePlayer(cmd);
                             break;
                         case 10:
-                            program.RemoveTournament();
+                            program.RemoveTournament(cmd);
                             break;
                         case 11:
                             program.RegistrationIndividual();
@@ -75,29 +76,22 @@ namespace College_Sports_Management_System
                         case 13:
                             program.Payment();
                             break;
+                        case 14:
+                            program.ViewScoreBoard(cmd);
+                            break;
                         default:
                             break;
                     }
                 }
-                while (choice < 14 && choice > 0);
+                while (choice < 15 && choice > 0);
 
                 conn.Close();
             }
 
             public void AddCollege(SqlCommand cmd)
             {
-                Console.Write("Enter College Id:");
-                int collegeId = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Enter College Name:");
-                string collegeName = Console.ReadLine();
+                Console.WriteLine("College List");
 
-                cmd.CommandText = $"INSERT INTO COLLEGE VALUES({collegeId},'{collegeName}')";
-                cmd.ExecuteNonQuery();
-
-                Console.WriteLine("College Registered Successfully!");
-            }
-            public void RemoveCollege(SqlCommand cmd)
-            {
                 cmd.CommandText = $"SELECT * FROM COLLEGE";
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -117,7 +111,44 @@ namespace College_Sports_Management_System
                 {
                     Console.WriteLine(collage.CollegeId + " " + collage.CollegeName);
                 }
-                
+
+                Console.WriteLine();
+
+                Console.Write("Enter College Id:");
+                int collegeId = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter College Name:");
+                string collegeName = Console.ReadLine();
+
+                cmd.CommandText = $"INSERT INTO COLLEGE VALUES({collegeId},'{collegeName}')";
+                cmd.ExecuteNonQuery();
+
+                Console.WriteLine("College Registered Successfully!");
+            }
+            public void RemoveCollege(SqlCommand cmd)
+            {
+                Console.WriteLine("College List");
+
+                cmd.CommandText = $"SELECT * FROM COLLEGE";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                List<College> colleges = new List<College>();
+
+                while (reader.Read())
+                {
+                    College college = new College();
+                    college.CollegeId = (int)reader["collegeId"];
+                    college.CollegeName = (string)reader["collegeName"];
+                    colleges.Add(college);
+                }
+
+
+
+                foreach (College collage in colleges)
+                {
+                    Console.WriteLine(collage.CollegeId + " " + collage.CollegeName);
+                }
+
+                Console.WriteLine();
 
                 using (SqlConnection connect = new SqlConnection("Data Source=5CG9441HWP;Initial Catalog=CollegeSportsManagementSystem;Encrypt=False;Integrated Security=True;"))
                 {
@@ -140,12 +171,26 @@ namespace College_Sports_Management_System
             }
             public void AddSports(SqlCommand cmd) 
             {
+                Console.WriteLine("Sports List");
+
+                cmd.CommandText = $"SELECT * FROM SPORTS";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader["sportsId"]+" " + reader["sportsName"]);
+                }
+
+                Console.WriteLine();
+
                 Console.Write("Enter Sports Id:");
                 int sportsId = Convert.ToInt32(Console.ReadLine());
                 Console.Write("Enter Sports Name:");
                 string sportsName = Console.ReadLine();
+                Console.Write("Enter Type of Sport (Individual/ Team):");
+                string type = Console.ReadLine();
 
-                cmd.CommandText = $"INSERT INTO SPORTS VALUES({sportsId},'{sportsName}')";
+                cmd.CommandText = $"INSERT INTO SPORTS VALUES({sportsId},'{sportsName}','{type}')";
                 cmd.ExecuteNonQuery();
 
                 Console.WriteLine("Sports Registered Successfully!");
@@ -168,6 +213,19 @@ namespace College_Sports_Management_System
             }
             public void AddTournament(SqlCommand cmd) 
             {
+                Console.WriteLine("Tournament List");
+
+                cmd.CommandText = $"SELECT * FROM TOURNAMENTS";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader["tournamentId"] + " " + reader["tournamentName"]+" " + reader["collegeId"]);
+                }
+
+                Console.WriteLine();
+
                 Console.Write("Enter Tournament Id:");
                 int tournamentId = Convert.ToInt32(Console.ReadLine());
                 Console.Write("Enter Tournament Name:");
@@ -216,8 +274,21 @@ namespace College_Sports_Management_System
                     Console.WriteLine("Error" + error.Message);
                 }
             }
-            public void RemovePlayer() 
+            public void RemovePlayer(SqlCommand cmd) 
             {
+                Console.WriteLine("Player List");
+
+                cmd.CommandText = $"SELECT * FROM PLAYERS";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader["playerId"] + " " + reader["playerName"] + " " + reader["collegeId"]);
+                }
+
+                Console.WriteLine();
+
                 using (SqlConnection connect = new SqlConnection("Data Source=5CG9441HWP;Initial Catalog=CollegeSportsManagementSystem;Encrypt=False;Integrated Security=True;"))
                 {
                     connect.Open();
@@ -235,12 +306,25 @@ namespace College_Sports_Management_System
                     connect.Close();
                 }
             }
-            public void RemoveTournament() 
+            public void RemoveTournament(SqlCommand cmd) 
             {
+                Console.WriteLine("Tournament List");
+
+                cmd.CommandText = $"SELECT * FROM TOURNAMENTS";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader["tournamentId"] + " " + reader["tournamentName"] + " " + reader["collegeId"]);
+                }
+
+                Console.WriteLine();
+
                 using (SqlConnection connect = new SqlConnection("Data Source=5CG9441HWP;Initial Catalog=CollegeSportsManagementSystem;Encrypt=False;Integrated Security=True;"))
                 {
                     connect.Open();
-                    Console.WriteLine("\n Enter the Tournament Id to be deleted: ");
+                    Console.WriteLine("\nEnter the Tournament Id to be deleted: ");
                     int tournamentId = Convert.ToInt32(Console.ReadLine());
 
                     using (SqlCommand command = new SqlCommand("removeTournament", connect))
@@ -282,12 +366,25 @@ namespace College_Sports_Management_System
 
                 
             }
-            public void RemoveSports() 
+            public void RemoveSports(SqlCommand cmd) 
             {
+                Console.WriteLine("Sports List");
+
+                cmd.CommandText = $"SELECT * FROM SPORTS";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader["sportsId"] + " " + reader["sportsName"]);
+                }
+
+                Console.WriteLine();
+
                 using (SqlConnection connect = new SqlConnection("Data Source=5CG9441HWP;Initial Catalog=CollegeSportsManagementSystem;Encrypt=False;Integrated Security=True;"))
                 {
                     connect.Open();
-                    Console.WriteLine("\n Enter the Sports Id to be deleted: ");
+                    Console.WriteLine("\nEnter the Sports Id to be deleted: ");
                     int sportsId = Convert.ToInt32(Console.ReadLine());
 
                     using (SqlCommand command = new SqlCommand("removeSports", connect))
@@ -300,6 +397,23 @@ namespace College_Sports_Management_System
                     }
                     connect.Close();
                 }
+            }
+            public void ViewScoreBoard(SqlCommand cmd)
+            {
+                Console.Write("Enter Tournament Id:");
+                int tournamentId = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter Sports Id:");
+                int sportsId = Convert.ToInt32(Console.ReadLine());
+
+                cmd.CommandText = $"SELECT * FROM SCOREBOARD WHERE tournamentId = {tournamentId} AND sportsId = {sportsId} ORDER BY SCORE DESC";
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                Console.WriteLine($"ScoreBoard of Sport {sportsId} in the Tournament {tournamentId}\n");
+
+                while (reader.Read()) 
+                {
+                    Console.WriteLine(reader["playerId"]+" "+reader["score"]);
+                } 
             }
             public void RegistrationIndividual() { }
             public void RegistrationGroup() { }
