@@ -65,6 +65,7 @@ namespace Hands_On
 
             keysChar.Sort();
 
+            //Create a List of List and Initialize
             List<List<char>> lettersMatrix = new List<List<char>>();
 
             foreach (char character in keysChar)
@@ -72,6 +73,8 @@ namespace Hands_On
                 lettersMatrix.Add(new List<char>());
             }
 
+
+            //Place the character of message 
             int messageIndex = 0;
             int range = (int)Math.Ceiling((double)message.Length / key.Length);
 
@@ -93,15 +96,50 @@ namespace Hands_On
                 }
             }
 
+            //Get the sorting order
+            int[] mapping = new int[key.Length];
+            char[] existingChar = new char[key.Length];
+            for (int i = 0; i < key.Length; i++)
+            {
+                if (existingChar.Contains(key[i]))
+                {
+                    int countChar = existingChar.Count(character => character == keysChar[i]);
+                    for (int j = 0;j < key.Length;j++)
+                    {
+                        if (key[j] == keysChar[i])
+                        {
+                            if(countChar == 0)
+                            {
+                                mapping[i] = j; 
+                                break;
+                            }
+                            else
+                            {
+                                countChar--;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    mapping[i] = keysChar.IndexOf(key[i]);
+                }
+                existingChar[i] = key[i];
+            }
+            
 
-
+            //Extract the cipher text based on the sorting order
             string cipherText = "";
 
             for(int i = 0; i < range; i++)
             {
-                for(int keyIndex = 0;keyIndex < keysChar.Count; keyIndex++)
+                for(int mapIndex = 0;mapIndex < mapping.Length; mapIndex++)
                 {
-
+                    
+                    int index = Array.IndexOf(mapping, mapIndex);
+                    Console.WriteLine(i + " " + index);
+                    cipherText += lettersMatrix[index][i];
+                    
                 }
             }
 
