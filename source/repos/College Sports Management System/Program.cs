@@ -33,6 +33,8 @@ namespace College_Sports_Management_System
                         "12 - Registration Group\n" +
                         "13 - Payment\n" +
                         "14 - View ScoreBoard\n" +
+                        "15 - Add Team\n" +
+                        "16 - Remove Team\n" +
                         "Enter your choice : ");
                     choice = Convert.ToInt32(Console.ReadLine());
                     Program program = new Program();
@@ -80,6 +82,9 @@ namespace College_Sports_Management_System
                         case 14:
                             program.ViewScoreBoard(cmd);
                             break;
+                        case 15:
+                            program.AddTeam(cmd);
+                            break;
                         default:
                             break;
                     }
@@ -102,7 +107,7 @@ namespace College_Sports_Management_System
                 cmd.CommandText = $"INSERT INTO COLLEGE VALUES({collegeId},'{collegeName}')";
                 cmd.ExecuteNonQuery();
 
-                Console.WriteLine("College Registered Successfully!");
+                Console.WriteLine("College Registered Successfully!\n");
             }
             public void DisplayCollege(SqlCommand cmd)
             {
@@ -150,7 +155,7 @@ namespace College_Sports_Management_System
                         command.Parameters.Add("@collegeId", System.Data.SqlDbType.Int).Value = collegeId;
                         command.ExecuteNonQuery();
 
-                        Console.WriteLine("College Deleted Successfully!");
+                        Console.WriteLine("College Deleted Successfully!\n");
                     }
                     connect.Close();
                 }
@@ -174,7 +179,7 @@ namespace College_Sports_Management_System
                 cmd.CommandText = $"INSERT INTO SPORTS VALUES({sportsId},'{sportsName}','{type}')";
                 cmd.ExecuteNonQuery();
 
-                Console.WriteLine("Sports Registered Successfully!");
+                Console.WriteLine("Sports Registered Successfully!\n");
             }
             public void DisplaySport(SqlCommand cmd)
             {
@@ -211,12 +216,12 @@ namespace College_Sports_Management_System
                             command.Parameters.Add("@sportsId", System.Data.SqlDbType.Int).Value = sportsId;
                             command.ExecuteNonQuery();
 
-                            Console.WriteLine("Sports Deleted Successfully!");
+                            Console.WriteLine("Sports Deleted Successfully!\n");
                         }
                     }
                     catch(Exception ex)
                     {
-                        Console.WriteLine("Error - "+ex.Message);
+                        Console.WriteLine("Error - "+ex.Message+"\n");
                     }
                     connect.Close();
                 }
@@ -249,7 +254,7 @@ namespace College_Sports_Management_System
                 {
                     Console.WriteLine("Error" + error.Message);
                 }
-
+                Console.WriteLine();
                 
             }
             public void DisplayTournament(SqlCommand cmd)
@@ -287,6 +292,7 @@ namespace College_Sports_Management_System
                         Console.WriteLine("Tournament Deleted Successfully!");
                     }
                     connect.Close();
+                    Console.WriteLine();
                 }
             }
 
@@ -317,6 +323,8 @@ namespace College_Sports_Management_System
                 {
                     Console.WriteLine("Error" + error.Message);
                 }
+
+                Console.WriteLine();
             }
             public void DisplayPlayerList(SqlCommand cmd)
             {
@@ -354,6 +362,7 @@ namespace College_Sports_Management_System
                         Console.WriteLine("Player Deleted Successfully!");
                     }
                     connect.Close();
+                    Console.WriteLine();
                 }
             }
 
@@ -381,10 +390,11 @@ namespace College_Sports_Management_System
                 }
                 else
                 {
+                    Console.WriteLine("No scoreboard available in the mentioned fields. Kindly Add!");
                     AddScoreBoard(cmd);
                 }
 
-                
+                Console.WriteLine();
             }
             public void ViewScoreBoard(SqlCommand cmd)
             {
@@ -403,6 +413,7 @@ namespace College_Sports_Management_System
                     Console.WriteLine(reader["playerId"]+" "+reader["score"]);
                 }
                 reader.Close();
+                Console.WriteLine();
             }
             public void AddScoreBoard(SqlCommand cmd)
             {
@@ -420,17 +431,51 @@ namespace College_Sports_Management_System
                 cmd.ExecuteNonQuery();
 
                 Console.WriteLine("ScoreBoard Added Successfully!");
+                Console.WriteLine();
             }
 
 
             public void AddTeam(SqlCommand cmd)
             {
                 Console.Write("Enter Team Id:");
-                int playerId = Convert.ToInt32(Console.ReadLine());
+                int teamId = Convert.ToInt32(Console.ReadLine());
                 Console.Write("Enter Team Name:");
-                string playerName = Console.ReadLine();
+                string teamName = Console.ReadLine();
+
+                cmd.CommandText = $"INSERT INTO TEAM VALUES({teamId},'{teamName}')";
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Team Registered Successfully!");
 
                 DisplayPlayerList(cmd);
+                int playerId = 0;
+                Console.WriteLine("Enter Player Id to include in Team. To exit press 0\n");
+                do
+                {
+                    Console.Write("Player Id: ");
+                    playerId = Convert.ToInt32(Console.ReadLine());
+                    int count = 0;
+                    try
+                    {
+                        cmd.CommandText = $"SELECT * FROM PLAYERS WHERE playerId = {playerId}";
+                        count = (int)cmd.ExecuteScalar();
+
+                        if (count > 0)
+                        {
+                            cmd.CommandText = $"UPDATE PLAYERS SET teamId = {teamId} WHERE playerId = {playerId}')";
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    catch(SqlException ex)
+                    {
+                        Console.WriteLine("Error - " + ex.Message);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Error - " + ex.Message);
+                    }
+                }
+                while (playerId != 0);.
+                Console.WriteLine();
             }
             public void RegistrationIndividual(SqlCommand cmd) 
             {
@@ -490,10 +535,9 @@ namespace College_Sports_Management_System
 
                     Console.WriteLine("Registration Successfully!");
                 }
-
+                Console.WriteLine();
 
             }
-
             public void RegisterTeam(SqlCommand cmd)
             {
                 DisplaySport(cmd);
@@ -534,6 +578,7 @@ namespace College_Sports_Management_System
 
                     Console.WriteLine("Registration Successfully!");
                 }
+                Console.WriteLine();
             }
             public void RegistrationGroup(SqlCommand cmd) 
             {
@@ -565,8 +610,12 @@ namespace College_Sports_Management_System
                     default:
                         break;
                 }
+                Console.WriteLine();
             }
-            public void Payment() { }
+            public void Payment() 
+            {
+
+            }
         }
     }
 }
