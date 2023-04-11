@@ -33,7 +33,11 @@
             //Number of Open Paranthese and Close Parantheses are same and Equal to number of pairs is valid and added to List.
             if (OpenCount == 0 && CloseCount == 0)
             {
-                ValidParantheses.Add(Parantheses);
+                if (!ValidParantheses.Contains(Parantheses.TrimEnd()))
+                {
+                    ValidParantheses.Add(Parantheses.TrimEnd());
+                }
+                
                 return;
             }
 
